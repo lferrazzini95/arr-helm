@@ -1,0 +1,6 @@
+apiVersion: 0.1.0
+name: arr-helm
+version: 0.1.0
+description: arr service setup
+type: application
+appVersion: 0.1.0

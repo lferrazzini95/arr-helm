@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ printf "%s:%s" .Values.image.name .Values.image.tag }}
+        env:
+          {{- range .Values.envVars }}
+          - name: {{ .name }}
+            value: {{ .value | quote }}
+          {{- end }}
+        ports:
+        - containerPort: {{ .Values.ports.webui }}
+          name: webui
+        volumeMounts:
+        - name: config
+          mountPath: {{ .Values.storage.config.path }}
+        {{- range .Values.mounts }}
+        - name: {{ .mountName }}
+          mountPath: /{{ .path }}
+          subPath: {{ .path }}
+        {{- end }}
+        resources: {{- toYaml .Values.resources | nindent 10 }}
+      volumes:
+      - name: config
+        persistentVolumeClaim:
+          claimName: {{ .Release.Name }}-config-pvc
+      {{- range .Values.mounts }}
+      - name: {{ .mountName }}
+        persistentVolumeClaim:
+          claimName: {{ .pvcName }}
+      {{- end }}
