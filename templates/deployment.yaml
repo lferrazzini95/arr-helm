@@ -30,8 +30,8 @@ spec:
           {{- end }}
           {{- range .Values.mounts }}
           - name: {{ .mountName }}
-            mountPath: /{{ .path }}
-            subPath: {{ .path }}
+            mountPath: /{{ .mountPath }}
+            subPath: {{ .subPath }}
           {{- end }}
         resources: {{- toYaml .Values.resources | nindent 10 }}
       volumes:

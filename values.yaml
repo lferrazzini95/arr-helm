@@ -13,7 +13,8 @@ storage:
 mounts: []
 #  - pvcName: ""
 #    mountName: ""
-#    path: ""
+#    subPath: ""
+#    mountPath: ""
 
 resources:
   limits:
