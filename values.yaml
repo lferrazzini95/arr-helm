@@ -6,6 +6,7 @@ image:
 
 storage:
   config:
+    enabled: true
     size: 5Gi
     path: /config
 

@@ -24,20 +24,24 @@ spec:
         - containerPort: {{ .Values.ports.webui }}
           name: webui
         volumeMounts:
-        - name: config
-          mountPath: {{ .Values.storage.config.path }}
-        {{- range .Values.mounts }}
-        - name: {{ .mountName }}
-          mountPath: /{{ .path }}
-          subPath: {{ .path }}
-        {{- end }}
+          {{- if .Values.storage.config.enabled }}
+          - name: config
+            mountPath: {{ .Values.storage.config.path }}
+          {{- end }}
+          {{- range .Values.mounts }}
+          - name: {{ .mountName }}
+            mountPath: /{{ .path }}
+            subPath: {{ .path }}
+          {{- end }}
         resources: {{- toYaml .Values.resources | nindent 10 }}
       volumes:
-      - name: config
-        persistentVolumeClaim:
-          claimName: {{ .Release.Name }}-config-pvc
-      {{- range .Values.mounts }}
-      - name: {{ .mountName }}
-        persistentVolumeClaim:
-          claimName: {{ .pvcName }}
-      {{- end }}
+        {{- if .Values.storage.config.enabled }}
+        - name: config
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-config-pvc
+        {{- end }}
+        {{- range .Values.mounts }}
+        - name: {{ .mountName }}
+          persistentVolumeClaim:
+            claimName: {{ .pvcName }}
+        {{- end }}
