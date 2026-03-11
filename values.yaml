@@ -34,3 +34,9 @@ resources:
   requests:
     memory: 1024Mi
     cpu: 250m
+
+ingress:
+  enabled: false
+  host: "my.lidarr.com" # Change this for each app deployment
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
