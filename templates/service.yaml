@@ -21,7 +21,7 @@ metadata:
     {{- toYaml .Values.ingress.annotations | nindent 4 }}
 spec:
   rules:
-  - host: {{ .Values.ingress.host | quote }}
+  - host: {{ .Values.ingress.host | default (printf "my.%s.com" .Release.Name) | quote }}
     http:
       paths:
       - path: /
